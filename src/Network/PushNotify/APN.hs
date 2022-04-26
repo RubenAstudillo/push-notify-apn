@@ -526,9 +526,9 @@ newConnection aci = do
                   }
           pure clip
 
-    isOpen <- newIORef True
+    isOpenRef <- newIORef True
     let handleGoAway _rsgaf = do
-            lift $ writeIORef isOpen False
+            lift $ writeIORef isOpenRef False
             return ()
     client <-
         fmap (either throw id) . runClientIO $ do
@@ -541,7 +541,7 @@ newConnection aci = do
         _updated <- runClientIO $ _updateWindow $ _incomingFlowControl client
         threadDelay 1000000
     workersem <- newQSem maxConcurrentStreams
-    return $ ApnConnection client aci workersem flowWorker isOpen
+    return $ ApnConnection client aci workersem flowWorker isOpenRef
 
 
 closeApnConnection :: ApnConnection -> IO ()
