@@ -725,12 +725,12 @@ data ApnFatalError = ApnFatalErrorBadCollapseId
     deriving (Eq, Show, Generic)
 
 instance FromJSON ApnFatalError where
-    parseJSON json =
-        let result = parse genericParser json
+    parseJSON jsonRaw =
+        let result = parse genericParser jsonRaw
         in
             case result of
                 Success success -> return success
-                Error err -> case json of
+                Error err -> case jsonRaw of
                                 String other -> return $ ApnFatalErrorOther other
                                 _            -> fail err
 
