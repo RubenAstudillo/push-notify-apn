@@ -427,8 +427,8 @@ newSession certKey certPath caPath useJwt dev maxparallel maxConnectionCount top
 -- to call this function.
 closeSession :: ApnSession -> IO ()
 closeSession s = do
-    isOpen <- atomicModifyIORef' (apnSessionOpen s) (False,)
-    unless isOpen $ error "Session is already closed"
+    isOpen' <- atomicModifyIORef' (apnSessionOpen s) (False,)
+    unless isOpen' $ error "Session is already closed"
     destroyAllResources (apnSessionPool s)
 
 -- | Check whether a session is open or has been closed
