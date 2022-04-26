@@ -675,7 +675,7 @@ sendApnRaw connection deviceToken mJwtBearerToken message = bracket_
                         >>= parseEither (\obj -> ctor <$> obj .: "reason")
 
         getHeaderEx :: HTTP2.HeaderName -> [HTTP2.Header] -> HTTP2.HeaderValue
-        getHeaderEx name headers = fromMaybe (throw $ ApnExceptionMissingHeader name) (DL.lookup name headers)
+        getHeaderEx name headers' = fromMaybe (throw $ ApnExceptionMissingHeader name) (DL.lookup name headers')
 
         defaultHeaders :: Text -> ByteString -> ByteString -> [(HTTP2.HeaderName, ByteString)]
         defaultHeaders hostname token topic = [ ( ":method", "POST" )
