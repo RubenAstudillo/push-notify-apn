@@ -405,7 +405,7 @@ newSession certKey certPath caPath useJwt dev maxparallel maxConnectionCount top
       certsOk <- checkCertificates connInfo
       unless certsOk $ error "Unable to load certificates and/or the private key"
 
-    isOpen <- newIORef True
+    isOpenRef <- newIORef True
 
     let connectionUnusedTimeout :: NominalDiffTime
         connectionUnusedTimeout = 300
@@ -415,7 +415,7 @@ newSession certKey certPath caPath useJwt dev maxparallel maxConnectionCount top
     let session =
             ApnSession
             { apnSessionPool = pool
-            , apnSessionOpen = isOpen
+            , apnSessionOpen = isOpenRef
             }
     return session
 
