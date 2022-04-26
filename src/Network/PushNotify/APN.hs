@@ -633,7 +633,7 @@ sendApnRaw connection deviceToken mJwtBearerToken message = bracket_
         token1 = unApnToken deviceToken
 
     res <- _startStream client $ \stream ->
-        let init = headers stream requestHeaders id
+        let init' = headers stream requestHeaders id
             handler isfc osfc = do
                 -- sendData client stream (HTTP2.setEndStream) message
                 upload message (HTTP2.setEndHeader . HTTP2.setEndStream) client (_outgoingFlowControl client) stream osfc
@@ -661,7 +661,7 @@ sendApnRaw connection deviceToken mJwtBearerToken message = bracket_
                             unknown ->
                                 ApnMessageResultFatalError $
                                 ApnFatalErrorOther (T.pack $ "unhandled status: " ++ show unknown)
-        in StreamDefinition init handler
+        in StreamDefinition init' handler
     case res of
         Left _     -> return ApnMessageResultBackoff -- Too much concurrency
         Right res1 -> return res1
